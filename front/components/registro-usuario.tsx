@@ -35,7 +35,7 @@ export function RegistroUsuario() {
     return true
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setErro('')
     setSucesso(false)
@@ -43,11 +43,33 @@ export function RegistroUsuario() {
     if (validarFormulario()) {
       // Simula o envio para um servidor
       console.log('Dados de registro:', { email, senha })
-      // Limpa os campos e mostra mensagem de sucesso
-      setEmail('')
-      setSenha('')
-      setConfirmacaoSenha('')
-      setSucesso(true)
+
+      try {
+        const response = await fetch('http://localhost:3001/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, senha })
+        })
+
+        if (!response.ok) {
+          throw new Error('Erro no servidor')
+        }
+
+        const data = await response.json()
+        console.log('Resposta do servidor:', data)
+
+        // Limpa os campos e mostra mensagem de sucesso
+        setEmail('')
+        setSenha('')
+        setConfirmacaoSenha('')
+        setSucesso(true)
+
+      } catch (error) {
+        console.log(error)
+        setErro('Erro no servidor')
+      }
     }
   }
 

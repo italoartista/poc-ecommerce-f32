@@ -58,6 +58,10 @@ export function RegistroUsuario() {
             }
 
             const data = await response.json();
+
+            // captura token e salva no local storage
+            localStorage.setItem('token', data.token);
+            
             console.log('Resposta do servidor:', data);
 
             // Limpa os campos e mostra mensagem de sucesso

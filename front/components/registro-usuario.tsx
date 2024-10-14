@@ -57,6 +57,7 @@ export function RegistroUsuario() {
         }
 
         const data = await response.json();
+        localStorage.setItem('token', data.token);  
         console.log('Resposta do servidor:', data);
 
         setEmail('');

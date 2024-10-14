@@ -45,6 +45,7 @@ export function LoginForm() {
     setLoading(true);
     setError("");
     setSuccess(false);
+    const token = localStorage.getItem("token");
     if (validate()) {
       try {
         const senha = password;
@@ -53,7 +54,7 @@ export function LoginForm() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email, senha }),
+          body: JSON.stringify({ email, senha, token }),
         });
   
         if (!response.ok) {

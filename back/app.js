@@ -8,7 +8,7 @@ const app = express();
 const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
-    database: 'postgres',
+    database: 'ecommerce',
     password: '',
     port: 5432,
 });
@@ -40,16 +40,36 @@ app.post('/register', (req, res) => {
             res.status(500).json({ message: 'Erro ao adicionar usuário' });
             return;
         }
+        jwt.sign({ email }, 'segredo', { expiresIn: '1h' }, (err, token) => {
+            if (err) {
+                console.error('Erro ao gerar token:', err);
+                res.status(500).json({ message: 'Erro ao gerar token' });
+                return;
+            }
+            res.status(201).json({ message: 'Usuário adicionado com sucesso', token });
+        });
         res.status(201).json({ message: 'Usuário adicionado com sucesso' });
     });
 });
 
 app.post('/login', (req, res) => {
-    const { email, senha } = req.body;
+    const { email, senha, token } = req.body;
     console.log(email, senha);
     if (!email || !senha) {
         res.status(400).json({ message: 'Email e senha são obrigatórios' });
         return;
+    }
+
+    if(token) { 
+        jwt.verify(token, 'segredo', (err, decoded) => {
+            if (err) {
+                console.error('Erro ao verificar token:', err);
+                res.status(401).json({ message: 'Token inválido' });
+                return;
+            }
+            console.log(decoded);
+            return res.status(200).json({ message: 'Usuário logado com sucesso' });
+        });
     }
 
     const senhaCriptografada = criptografarSenha(senha);

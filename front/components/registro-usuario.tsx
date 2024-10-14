@@ -36,13 +36,12 @@ export function RegistroUsuario() {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setErro('')
-    setSucesso(false)
+    e.preventDefault();
+    setErro('');
+    setSucesso(false);
 
     if (validarFormulario()) {
-      // Simula o envio para um servidor
-      console.log('Dados de registro:', { email, senha })
+      console.log('Dados de registro:', { email, senha });
 
       try {
         const response = await fetch('http://localhost:3001/register', {
@@ -51,27 +50,26 @@ export function RegistroUsuario() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ email, senha })
-        })
+        });
 
         if (!response.ok) {
-          throw new Error('Erro no servidor')
+          throw new Error('Erro no servidor');
         }
 
-        const data = await response.json()
-        console.log('Resposta do servidor:', data)
+        const data = await response.json();
+        console.log('Resposta do servidor:', data);
 
-        // Limpa os campos e mostra mensagem de sucesso
-        setEmail('')
-        setSenha('')
-        setConfirmacaoSenha('')
-        setSucesso(true)
+        setEmail('');
+        setSenha('');
+        setConfirmacaoSenha('');
+        setSucesso(true);
 
       } catch (error) {
-        console.log(error)
-        setErro('Erro no servidor')
+        console.error('Erro ao registrar:', error);
+        setErro('Erro ao registrar. Tente novamente.');
       }
     }
-  }
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen ">

@@ -45,7 +45,7 @@ app.post('/register', (req, res) => {
             res.status(400).send('Erro ao cadastrar usuário');
         } else {
             // Gerar um token JWT
-            const token = jwt.sign({ email }, 'minhachave', { expiresIn: '1h' });
+            const token = jwt.sign({ email }, 'chave_secreta', { expiresIn: '1h' });
             res.status(201).json({ message: 'Usuário cadastrado com sucesso', token });
         }
     });
@@ -54,7 +54,7 @@ app.post('/register', (req, res) => {
 
 app.post('/login', async (req, res) => {
     const { email, password, token } = req.body;
-    console.log(email, password, token);
+
     try {
         if (token) {
             // Verificar o token JWT

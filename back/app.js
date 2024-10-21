@@ -35,7 +35,7 @@ app.post('/register', (req, res) => {
     }
 
     const senhaCriptografada = criptografarSenha(senha);
-    console.log(email, senhaCriptografada);
+    // console.log(email, senhaCriptografada);
     
     pool.query('INSERT INTO usuarios (email, senha, data_registro) VALUES ($1, $2, NOW())', [email, senhaCriptografada], (error, results) => {
         if (error) {
@@ -80,7 +80,8 @@ app.post('/login', (req, res) => {
 
 // Middleware para verificar o token JWT
 function verificarToken(req, res, next) {
-    const token = req.headers['authorization'];
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
     console.log("...");
     console.log(token);
     if (!token) {

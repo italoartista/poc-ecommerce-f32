@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
+<<<<<<< HEAD
+    "test": "jest"
+=======
     "dev": "node --watch app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+>>>>>>> main
   },
   "keywords": [],
   "author": "",
@@ -18,6 +22,8 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.0",
     "supertest": "^7.0.0"
   }
 }

@@ -41,6 +41,37 @@ export function RegistroUsuario() {
     setSucesso(false);
 
     if (validarFormulario()) {
+<<<<<<< HEAD
+      console.log('Dados de registro:', { email, senha });
+
+      try {
+        const response = await fetch('http://localhost:3001/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, senha })
+        });
+
+        if (!response.ok) {
+          throw new Error('Erro no servidor');
+        }
+
+        const data = await response.json();
+        console.log('Resposta do servidor:', data);
+
+        setEmail('');
+        setSenha('');
+        setConfirmacaoSenha('');
+        setSucesso(true);
+
+      } catch (error) {
+        console.error('Erro ao registrar:', error);
+        setErro('Erro ao registrar. Tente novamente.');
+      }
+    }
+  };
+=======
         // Simula o envio para um servidor
         console.log('Dados de registro:', { email, senha });
 
@@ -75,6 +106,7 @@ export function RegistroUsuario() {
 };
   
 
+>>>>>>> main
 
   return (
     <div className="flex justify-center items-center min-h-screen ">

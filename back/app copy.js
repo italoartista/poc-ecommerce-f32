@@ -1,26 +1,16 @@
 const express = require('express');
+const app = express(); 
 const cors = require('cors');
 const crypto = require('crypto');
 
 app.use(express.json())
 app.use(cors());
-app.use(express.json());
 
 
 function criptografarSenha(senha) {
-    if (typeof senha !== 'string') {
-        throw new TypeError('A senha deve ser uma string');
-    }
     return crypto.createHash('sha256').update(senha).digest('hex');
 }
 
-
-function criptografarSenhaBcrypt(senha) {
-    const salt = bcrypt.genSaltSync(10);
-    return bcrypt.hashSync(senha, salt);
-}
-
-// Rota de registro de usuários
 app.post('/register', (req, res) => {
     const { email, senha } = req.body;
     const senhaCriptografada = criptografarSenha(senha);
@@ -32,7 +22,4 @@ app.post('/register', (req, res) => {
 
 app.listen(3001, () => { 
     console.log('Servidor rodando na porta 3001');
-});
-
-
-module.exports = {pool, app, criptografarSenha};
+})

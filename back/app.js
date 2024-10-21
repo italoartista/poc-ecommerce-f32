@@ -8,8 +8,8 @@ const app = express();
 const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
-    database: 'poc_ecommerce',
-    password: '1234',
+    database: 'ecommerce',
+    password: '',
     port: 5432,
 });
 
@@ -35,7 +35,7 @@ app.post('/register', (req, res) => {
     }
 
     const senhaCriptografada = criptografarSenha(senha);
-    console.log(email, senhaCriptografada);
+   
     
     pool.query('INSERT INTO usuarios (email, senha, data_registro) VALUES ($1, $2, NOW())', [email, senhaCriptografada], (error, results) => {
         if (error) {
@@ -80,7 +80,10 @@ app.post('/login', (req, res) => {
 
 // Middleware para verificar o token JWT
 function verificarToken(req, res, next) {
-    const token = req.headers['authorization'];
+    let token = req.headers['authorization'];
+    if (token && token.startsWith('Bearer ')) {
+        token = token.slice(7, token.length);
+    }
     console.log("...");
     console.log(token);
     if (!token) {

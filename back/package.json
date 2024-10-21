@@ -3,15 +3,24 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
+<<<<<<< HEAD
     "test": "jest"
+=======
+    "dev": "node --watch app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+>>>>>>> main
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "express": "^4.21.0",
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
     "jest": "^29.7.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.0",

@@ -14,6 +14,7 @@ export function RegistroUsuario() {
   const [confirmacaoSenha, setConfirmacaoSenha] = useState('')
   const [erro, setErro] = useState('')
   const [sucesso, setSucesso] = useState(false)
+  const [required, setRequired] = useState(false)
 
   const validarFormulario = () => {
     if (!email || !senha || !confirmacaoSenha) {
@@ -76,9 +77,7 @@ export function RegistroUsuario() {
             setErro('Erro no servidor');
         }
     }
-};
-  
-
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen ">
@@ -92,8 +91,9 @@ export function RegistroUsuario() {
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
+               
                 id="email"
-                type="email"
+                type="text"
                 placeholder="seu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -106,6 +106,7 @@ export function RegistroUsuario() {
                 type="password"
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
+                required={false} // Remover a validação automática do navegador
               />
             </div>
             <div className="space-y-2">
@@ -115,6 +116,7 @@ export function RegistroUsuario() {
                 type="password"
                 value={confirmacaoSenha}
                 onChange={(e) => setConfirmacaoSenha(e.target.value)}
+                required={false} // Remover a validação automática do navegador
               />
             </div>
             <Button type="submit" className="w-full">Registrar</Button>
@@ -125,7 +127,7 @@ export function RegistroUsuario() {
             <Alert variant="destructive" className="mt-4">
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Erro</AlertTitle>
-              <AlertDescription>{erro}</AlertDescription>
+              <AlertDescription className="alert-description">{erro}</AlertDescription>
             </Alert>
           )}
           {sucesso && (

@@ -40,7 +40,7 @@ export function LoginForm() {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ email, password, token})
+          body: JSON.stringify({ email, password, token })
         });
 
         if (!response.ok) {
@@ -49,7 +49,7 @@ export function LoginForm() {
 
         const data = await response.json();
         console.log('Server response:', data);
-
+        localStorage.setItem('token', data.token);
         setEmail("");
         setPassword("");
         setSuccess(true);

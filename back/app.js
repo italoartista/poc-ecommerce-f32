@@ -25,6 +25,7 @@ pool.query('SELECT NOW()', (err, res) => {
     }
 });
 
+
 function criptografarSenha(senha) {
     return crypto.createHash('sha256').update(senha).digest('hex');
 }
@@ -44,7 +45,7 @@ app.post('/register', (req, res) => {
             console.log(err);
             res.status(400).send('Erro ao cadastrar usuário');
         } else {
-            // Gerar um token JWT
+            // // Gerar um token JWT
             const token = jwt.sign({ email }, 'minhachave', { expiresIn: '1h' });
             res.status(201).json({ message: 'Usuário cadastrado com sucesso', token });
         }
@@ -73,8 +74,10 @@ app.post('/login', async (req, res) => {
                 res.status(200).json({ message: 'Autenticação via token bem-sucedida', user });
             });
         } else {
+            
+            const senhaCriptografada = criptografarSenhaBcrypt(password);
             // Autenticar o usuário com base no email e senha
-            const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+            const result = await pool.query('SELECT * FROM users WHERE email = $1 AND hash_password = $2', [email, senhaCriptografada]);
 
             if (result.rows.length === 0) {
                 return res.status(400).send('Usuário não encontrado');
@@ -101,3 +104,5 @@ app.on('exit', () => {
 app.listen(3001, () => { 
     console.log('Servidor rodando na porta 3001');
 })
+
+module.exports = { criptografarSenhaBcrypt };

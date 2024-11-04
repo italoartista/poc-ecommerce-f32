@@ -12,8 +12,8 @@ app.use(cors());
 const pool = new Pool({
     localhost: 'localhost',
     user: 'postgres',
-    password: '', 
-    database: 'ecommerce',
+    password: '1234', 
+    database: 'poc_ecommerce',
     port: 5432
 });
 
@@ -36,10 +36,11 @@ function criptografarSenhaBcrypt(senha) {
 
 app.post('/register', (req, res) => {
     const { email, senha } = req.body;
+    
     const senhaCriptografada = criptografarSenhaBcrypt(senha);
     console.log(email, senhaCriptografada);
 
-    pool.query('INSERT INTO users (email, password_hash, created_at) VALUES ($1, $2, NOW() )', [email, senhaCriptografada], (err, result) => {
+    pool.query('INSERT INTO usuarios (email, senha, data_registro) VALUES ($1, $2, NOW() )', [email, senhaCriptografada], (err, result) => {
         if (err) {
             console.log(err);
             res.status(400).send('Erro ao cadastrar usuário');
@@ -54,7 +55,7 @@ app.post('/register', (req, res) => {
 
 app.post('/login', async (req, res) => {
     const { email, password, token } = req.body;
-
+    const senha = password;
     try {
         if (token) {
             // Verificar o token JWT
@@ -74,14 +75,14 @@ app.post('/login', async (req, res) => {
             });
         } else {
             // Autenticar o usuário com base no email e senha
-            const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+            const result = await pool.query('SELECT * FROM usuarios WHERE email = $1', [email]);
 
             if (result.rows.length === 0) {
                 return res.status(400).send('Usuário não encontrado');
             }
 
             const user = result.rows[0];
-            if (bcrypt.compareSync(password, user.password_hash)) {
+            if (bcrypt.compareSync(password, user.senha)) {
                 // Gerar um novo token JWT
                 const newToken = jwt.sign({ email: user.email }, 'seu_segredo_jwt', { expiresIn: '1h' });
                 res.status(200).json({ message: 'Usuário logado com sucesso', token: newToken });

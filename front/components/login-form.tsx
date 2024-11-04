@@ -1,8 +1,9 @@
 'use client'
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -18,12 +19,27 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true); // Set to true when the component mounts on the client side
+  }, []);
+  const router = isMounted ? useRouter() : null;
 
   const validateForm = () => {
     if (!email || !password) {
       setError("Both fields are required");
       return false;
     }
+    if(!(/\S+@\S+\.\S+/.test(email))){
+      setError("Please enter a valid email");
+      return false;
+    }
+    if(password.length < 6){
+      setError("Password must have at least 6 characters");
+      return false;
+    }
+    
     return true;
   };
 
@@ -46,12 +62,21 @@ export function LoginForm() {
           throw new Error('Server error');
         }
 
+
+
         const data = await response.json();
         console.log('Server response:', data);
 
         setEmail("");
         setPassword("");
         setSuccess(true);
+        if (router) {
+          // Safe to use router.push or other router methods here
+          router.push("/dashboard");
+        } else {
+          console.error("Router is not mounted yet.");
+        }
+
       } catch (error) {
         console.log(error);
         setError('Server error');
@@ -74,11 +99,11 @@ export function LoginForm() {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
-                type="email"
+                type="text"
                 placeholder="m@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
+          
               />
             </div>
             <div className="grid gap-2">
@@ -93,7 +118,7 @@ export function LoginForm() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
+              
               />
             </div>
             {error && <div className="text-red-500">{error}</div>}
